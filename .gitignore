@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+*.pkl
+data/
+web/node_modules/
+*.csv
+quantum_predictions.npy
+bio_allocation.npy
