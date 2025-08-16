@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum-Bio Bond Market Liquidity Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+</head>
+<body data-color-scheme="dark">
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="dashboard-title">
+                    <span class="quantum-badge">Quantum-Bio</span>
+                    Bond Market Liquidity Analyzer
+                </h1>
+                <div class="header-controls">
+                    <div class="status-indicators">
+                        <span class="status status--success">System Online</span>
+                        <span class="alert-count" id="alertCount">3 Alerts</span>
+                    </div>
+                    <button class="btn btn--primary" id="exportBtn">Export Report</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Alert Notifications -->
+    <div id="alertNotifications" class="alert-notifications">
+        <div class="alert alert--warning" data-alert-id="1">
+            <strong>High Fraud Risk Detected:</strong> Transaction ID 4 flagged for suspicious activity
+            <button class="alert-close" onclick="dismissAlert(1)">×</button>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="tab-navigation">
+        <div class="container">
+            <div class="tab-list">
+                <button class="tab-button active" data-tab="overview">Market Overview</button>
+                <button class="tab-button" data-tab="liquidity">Liquidity Heat Signatures</button>
+                <button class="tab-button" data-tab="fraud">Transaction Monitoring</button>
+                <button class="tab-button" data-tab="analytics">Market Analytics</button>
+                <button class="tab-button" data-tab="compliance">Regulatory Compliance</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <div class="container">
+            
+            <!-- Market Overview Tab -->
+            <div id="overview" class="tab-content active">
+                <div class="filters-section">
+                    <div class="filter-controls">
+                        <select class="form-control" id="bondTypeFilter">
+                            <option value="">All Bond Types</option>
+                            <option value="Government">Government</option>
+                            <option value="Corporate A">Corporate A</option>
+                            <option value="Corporate AAA">Corporate AAA</option>
+                        </select>
+                        <select class="form-control" id="issuerFilter">
+                            <option value="">All Issuers</option>
+                            <option value="SBI">SBI</option>
+                            <option value="ICICI Bank">ICICI Bank</option>
+                            <option value="Power Grid">Power Grid</option>
+                            <option value="NTPC">NTPC</option>
+                        </select>
+                        <input type="date" class="form-control" id="dateFilter" value="2025-08-15">
+                    </div>
+                </div>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-title">Total Transactions</div>
+                        <div class="kpi-value" id="totalTransactions">5</div>
+                        <div class="kpi-change positive">+12.5%</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">Average Liquidity Score</div>
+                        <div class="kpi-value" id="avgLiquidity">0.51</div>
+                        <div class="kpi-change positive">+8.2%</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">Fraud Alerts</div>
+                        <div class="kpi-value" id="fraudAlerts">1</div>
+                        <div class="kpi-change negative">-25%</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">Market Value (₹Cr)</div>
+                        <div class="kpi-value" id="marketValue">1027.76</div>
+                        <div class="kpi-change positive">+15.3%</div>
+                    </div>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <h3>Market Health Heatmap</h3>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="marketHeatmap"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Transaction Volume by Bond Type</h3>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="volumeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Liquidity Heat Signatures Tab -->
+            <div id="liquidity" class="tab-content">
+                <div class="liquidity-metrics">
+                    <div class="metric-card">
+                        <h4>Quantum Algorithm Performance</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 87%;">87%</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Bio-Optimization Effectiveness</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 80%;">80%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <h3>Liquidity Heat Signatures</h3>
+                        <div style="position: relative; height: 400px;">
+                            <canvas id="liquidityHeatmap"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Correlation Matrix</h3>
+                        <div style="position: relative; height: 400px;">
+                            <canvas id="correlationMatrix"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction Monitoring Tab -->
+            <div id="fraud" class="tab-content">
+                <div class="fraud-stats">
+                    <div class="stat-card fraud-high">
+                        <div class="stat-number">1</div>
+                        <div class="stat-label">High Risk</div>
+                    </div>
+                    <div class="stat-card fraud-medium">
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">Medium Risk</div>
+                    </div>
+                    <div class="stat-card fraud-low">
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">Low Risk</div>
+                    </div>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <h3>Risk Score Distribution</h3>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="riskDistribution"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Fraud Pattern Analysis</h3>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="fraudPatterns"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="transactions-table">
+                    <h3>Transaction Monitoring</h3>
+                    <table id="transactionsTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Time</th>
+                                <th>Bond Type</th>
+                                <th>Issuer</th>
+                                <th>Amount (₹Cr)</th>
+                                <th>Fraud Risk</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionTableBody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Market Analytics Tab -->
+            <div id="analytics" class="tab-content">
+                <div class="chart-grid analytics-grid">
+                    <div class="chart-container">
+                        <h3>Yield Curve Analysis</h3>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="yieldCurve"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Volume Trend Analysis</h3>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="volumeTrend"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Settlement Time Optimization</h3>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="settlementAnalysis"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Market Maker Participation</h3>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="marketMakerChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Regulatory Compliance Tab -->
+            <div id="compliance" class="tab-content">
+                <div class="compliance-dashboard">
+                    <div class="compliance-status">
+                        <div class="compliance-card">
+                            <h4>SEBI Compliance Status</h4>
+                            <div class="status status--success">Fully Compliant</div>
+                        </div>
+                        <div class="compliance-card">
+                            <h4>Audit Trail Coverage</h4>
+                            <div class="status status--success">100%</div>
+                        </div>
+                        <div class="compliance-card">
+                            <h4>Reporting Status</h4>
+                            <div class="status status--info">Up to Date</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Transaction Categorization</h3>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="complianceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="audit-table">
+                        <h3>Audit Trail - Flagged Transactions</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>Flag Reason</th>
+                                    <th>Risk Level</th>
+                                    <th>Status</th>
+                                    <th>Action Required</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>4</td>
+                                    <td>High fraud risk score (0.96)</td>
+                                    <td><span class="status status--error">High</span></td>
+                                    <td>Under Review</td>
+                                    <td><button class="btn btn--sm btn--outline">Review</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Transaction Detail Modal -->
+    <div id="transactionModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Transaction Details</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="transactionDetails">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" onclick="closeModal()">Close</button>
+                <button class="btn btn--primary">Flag Transaction</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
